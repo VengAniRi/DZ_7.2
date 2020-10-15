@@ -1,0 +1,48 @@
+Взаимодействие с другими людьмиdef get_shop_list_by_dishes(dishes, person_count):
+    quantity = {}
+    measures = {}
+    for dish in dishes:
+        for ingr in cook_book[dish]:
+            name = ingr['ingredient_name']
+            quantity[name] = quantity.get(name, 0) + ingr['quantity']*person_count
+            measures[name] = ingr['measure']
+    res = {}
+    for name, q in quantity.items():
+        res[name] = {'measure': measures[name], 'quantity': q}
+    return res
+
+
+f = open('recipes (2).txt', encoding='utf-8')
+lines = f.readlines()
+f.close()
+i = 0
+cook_book = {}
+for line in lines:
+    print(line.strip())
+while i < len(lines):
+    name = lines[i].strip()
+    i += 1
+    num = int(lines[i].strip())
+    i += 1
+    cook_book[name] = []
+    for j in range(num):
+        lst = lines[i].strip().split(' | ')
+        ingr = {}
+        ingr['ingredient_name'] = lst[0]
+        ingr['quantity'] = int(lst[1])
+        ingr['measure'] = lst[2]
+        cook_book[name].append(ingr)
+        i += 1
+    i += 1
+
+for name, ingrs in cook_book.items():
+    print(name)
+    for ingr in ingrs:
+        print(ingr)
+    print()
+print()
+
+total_ingrs = get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2)
+for name, inf in total_ingrs.items():
+    print(f'{name}: {inf}')
+
